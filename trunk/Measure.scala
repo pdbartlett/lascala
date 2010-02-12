@@ -1,10 +1,14 @@
 package lascala
 
-// Untyped (not yet used)
+// Helper methods, and possibly untyped versions later
 
 trait MeasureData {}
 trait Measure {}
-trait Query {}
+trait Query {
+  def isMatchingNode[D](node: D, nodeList: Seq[D], default: D): Boolean = {
+    (nodeList.isEmpty && node == default) || nodeList.contains(node)
+  }
+}
 
 // Zero-dimensional
 
@@ -31,40 +35,50 @@ trait MeasureData1[V, D1] extends MeasureData {
 }
 
 trait Measure1[V, D1] extends MeasureData1[V, D1] with Measure {
-  def newQuery(): Query1_0[V, D1] = new FilterQuery1_0[V, D1](this)
+  def newQuery(): Query1[V, D1] = new FilterQuery1[V, D1](this, List())
 }
 
-trait Query1_0[V, U1] extends Query {
-  def execute(): V
-  def restrict(nodes: Seq[U1]): Query1_1[V, U1]
+trait Query1[V, D1] extends Query {
+  def execute(): Iterator[(D1, V)]
+  def select(nodes: Seq[D1]): Query1[V, D1]
 }
 
-trait Query1_1[V, B1] extends Query {
-  def execute(): Iterator[(B1, V)]
-}
-
-class FilterQuery1_0[V, U1](measure: Measure1[V, U1]) extends Query1_0[V, U1] {
+class FilterQuery1[V, D1](measure: Measure1[V, D1], nodes1: Seq[D1]) extends Query1[V, D1] {
   private var defaultV: V = _
-  private var default1: U1 = _
+  private var default1: D1 = _
 
   def execute() = {
-    val predicate = (entry: (U1, V)) => entry._1 == default1
-    val maybeEntry = measure.data.find(predicate)
-    maybeEntry.getOrElse((default1, defaultV))._2
-  }
-
-  def restrict(nodes1: Seq[U1]) = new FilterQuery1_1(measure, nodes1)
-}
-
-class FilterQuery1_1[V, B1](measure: Measure1[V, B1], nodes1: Seq[B1]) extends Query1_1[V, B1] {
-  def execute() = {
-    val predicate = (entry: (B1, V)) => nodes1.contains(entry._1)
+    val predicate = (entry: (D1, V)) => isMatchingNode(entry._1, nodes1, default1)
     measure.data.filter(predicate)
   }
+
+  def select(newNodes1: Seq[D1]) = new FilterQuery1(measure, nodes1 ++ newNodes1)
 }
 
 // Two-dimensional
 
 trait MeasureData2[V, D1, D2] extends MeasureData {
   def data: Iterator[((D1, D2), V)]
+}
+
+trait Measure2[V, D1, D2] extends MeasureData2[V, D1, D2] with Measure {
+  def newQuery(): Query2[V, D1, D2] = new FilteredQuery2[V, D1, D2](this, List(), List())
+}
+
+trait Query2[V, D1, D2] extends Query {
+  def execute(): Iterator[((D1, D2), V)]
+  def select(nodes1: Seq[D1]): Query2[V, D1, D2]
+}
+
+class FilteredQuery2[V, D1, D2](measure: Measure2[V, D1, D2], nodes1: Seq[D1], nodes2: Seq[D2]) extends Query2[V, D1, D2] {
+  private var defaultV: V = _
+  private var default1: D1 = _
+  private var default2: D2 = _
+
+  def execute() = {
+    val predicate = (entry: ((D1, D2), V)) => isMatchingNode(entry._1._1, nodes1, default1) && isMatchingNode(entry._1._2, nodes2, default2)
+    measure.data.filter(predicate)
+  }
+
+  def select(newNodes1: Seq[D1]) = new FilteredQuery2(measure, nodes1 ++ newNodes1, nodes2)
 }
