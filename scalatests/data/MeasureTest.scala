@@ -1,4 +1,4 @@
-package pdbartlett.lascala.scala
+package pdbartlett.lascala.scala.data
 
 import org.scalatest.FunSuite
 
