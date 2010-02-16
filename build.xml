@@ -17,27 +17,27 @@
   </target>
 
   <target name="clean">
-    <echo message="Deleting existing 'sorted' class files..."/>
-    <delete dir="${classes}/lascala"/>
+    <echo message="Deleting existing 'pdbartlett.lascala.*' class files..."/>
+    <delete dir="${classes}/pdbartlett/lascala"/>
   </target>
 
   <target name="build" depends="init">
-    <echo message="Build main app/libraries..."/>
-    <scalac srcdir="." destdir="${classes}" classpath="${scalalib}">
-      <include name="*.scala"/>
+    <echo message="Building scala apps/libraries..."/>
+    <scalac srcdir="scala" destdir="${classes}" classpath="${scalalib}">
+      <include name="**/*.scala"/>
     </scalac>
   </target>
 
   <target name="test" depends="build">
-    <echo message="Building tests..."/>
-    <scalac srcdir="tests" destdir="${classes}" classpath="${scalalib};${scalatest}">
-      <include name="*.scala"/>
+    <echo message="Building scala tests..."/>
+    <scalac srcdir="scalatests" destdir="${classes}" classpath="${scalalib};${scalatest}">
+      <include name="**/*.scala"/>
     </scalac>
-    <echo message="Running tests..."/>
+    <echo message="Running scala tests..."/>
     <java classname="org.scalatest.tools.Runner" classpath="${scalalib}:${scalatest}:${classes}">
       <arg value="-o"/>
       <arg value="-s"/>
-      <arg value="lascala.MeasureTest"/>
+      <arg value="pdbartlett.lascala.scala.AllTests"/>
     </java>
   </target>
 

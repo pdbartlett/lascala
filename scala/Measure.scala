@@ -1,10 +1,8 @@
-package lascala
+package pdbartlett.lascala.scala
 
-// Helper methods, and possibly untyped versions later
+// Helpers
 
-trait MeasureData {}
-trait Measure {}
-trait Query {
+trait QueryHelper {
   def isMatchingNode[D](node: D, nodeList: Seq[D], default: D): Boolean = {
     (nodeList.isEmpty && node == default) || nodeList.contains(node)
   }
@@ -12,15 +10,15 @@ trait Query {
 
 // Zero-dimensional
 
-trait MeasureData0[V] extends MeasureData {
+trait MeasureData0[V] {
   def data: V
 }
 
-trait Measure0[V] extends MeasureData0[V] with Measure {
+trait Measure0[V] extends MeasureData0[V] {
   def newQuery(): Query0[V] = new Query0_0(this)
 }
 
-trait Query0[V] extends Query {
+trait Query0[V] {
   def execute(): V
 }
 
@@ -30,20 +28,20 @@ class Query0_0[V](measure: Measure0[V]) extends Query0[V] {
 
 // One-dimensional
 
-trait MeasureData1[V, D1] extends MeasureData {
+trait MeasureData1[V, D1] {
   def data: Iterator[(D1, V)]
 }
 
-trait Measure1[V, D1] extends MeasureData1[V, D1] with Measure {
+trait Measure1[V, D1] extends MeasureData1[V, D1] {
   def newQuery(): Query1[V, D1] = new FilterQuery1[V, D1](this, List())
 }
 
-trait Query1[V, D1] extends Query {
+trait Query1[V, D1] {
   def execute(): Iterator[(D1, V)]
   def select(nodes: Seq[D1]): Query1[V, D1]
 }
 
-class FilterQuery1[V, D1](measure: Measure1[V, D1], nodes1: Seq[D1]) extends Query1[V, D1] {
+class FilterQuery1[V, D1](measure: Measure1[V, D1], nodes1: Seq[D1]) extends Query1[V, D1] with QueryHelper {
   private var defaultV: V = _
   private var default1: D1 = _
 
@@ -57,20 +55,20 @@ class FilterQuery1[V, D1](measure: Measure1[V, D1], nodes1: Seq[D1]) extends Que
 
 // Two-dimensional
 
-trait MeasureData2[V, D1, D2] extends MeasureData {
+trait MeasureData2[V, D1, D2] {
   def data: Iterator[((D1, D2), V)]
 }
 
-trait Measure2[V, D1, D2] extends MeasureData2[V, D1, D2] with Measure {
+trait Measure2[V, D1, D2] extends MeasureData2[V, D1, D2] {
   def newQuery(): Query2[V, D1, D2] = new FilteredQuery2[V, D1, D2](this, List(), List())
 }
 
-trait Query2[V, D1, D2] extends Query {
+trait Query2[V, D1, D2] {
   def execute(): Iterator[((D1, D2), V)]
   def select(nodes1: Seq[D1]): Query2[V, D1, D2]
 }
 
-class FilteredQuery2[V, D1, D2](measure: Measure2[V, D1, D2], nodes1: Seq[D1], nodes2: Seq[D2]) extends Query2[V, D1, D2] {
+class FilteredQuery2[V, D1, D2](measure: Measure2[V, D1, D2], nodes1: Seq[D1], nodes2: Seq[D2]) extends Query2[V, D1, D2] with QueryHelper {
   private var defaultV: V = _
   private var default1: D1 = _
   private var default2: D2 = _
