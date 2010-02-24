@@ -4,4 +4,7 @@ import pdbartlett.lascala.scala.data._
 
 import org.scalatest.SuperSuite
 
-class AllTests extends SuperSuite(List(new MeasureTest)) {}
+class AllTests extends SuperSuite(List(
+    new BulkDataSourceTest,
+    new MeasureTest
+)) {}
