@@ -81,16 +81,32 @@ class TestBulkDataSource extends BulkDataSource[String, Int] {
   val data = Map("op1" -> 6, "op2" -> 9, "ans" -> 42)
 }
 
+class ReadOnceData extends Iterable[((String, Colour.Value), Int)] with TestData {
+  var count = 0
+  def elements = {
+    count += 1
+    if (count == 1) twoDimAggData.elements else throw new IllegalStateException
+  }
+}
+
 object TestPreAggMeasure1 extends TestBulkDataSource with PreAggregated[Int] with Dimensionality1[String]
 
 object TestPreAggMeasure2 extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] with TestData {
   val data = twoDimAggData
 }
 
-object TestBulkAggMeasure2 extends BulkAggregated2[Int, String, Colour.Value] with TestData {
+object TestBulkAggMeasure extends BulkAggregated2[Int, String, Colour.Value] with TestData {
   val data = twoDimData
   val d1 = CountriesDim
   val d2 = ColoursDim
   val defValue = 0
   def combine(v1: Int, v2: Int) = v1 + v2
+}
+
+object TestReadOnceMeasure extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] {
+  val data = new ReadOnceData
+}
+
+object TestStorageMeasure extends PreAggregated[Int] with InMemoryStorage[Int] with Dimensionality2[String, Colour.Value] {
+  val data = new ReadOnceData
 }

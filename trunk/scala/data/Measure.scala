@@ -32,3 +32,24 @@ trait BulkAggregated2[V, D1, D2] extends Measure[V] with Dimensionality2[D1, D2]
     map
   }
 }
+
+trait Storage[V] extends Measure[V] {
+  type K
+  def store(aggregated: Iterable[(K, V)]): Unit
+  def retrieve(): Iterable[(K, V)]
+  private var stored = false
+  abstract override def aggData = {
+    if (!stored) {
+      store(super.aggData)
+      stored = true
+    }
+    retrieve()
+  }
+}
+
+trait InMemoryStorage[V] extends Storage[V] {
+  var map: Map[K, V] = Map()
+  def store(aggregated: Iterable[(K, V)]) { map ++= aggregated }
+  def retrieve() = map
+}
+    
