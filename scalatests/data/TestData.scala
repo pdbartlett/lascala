@@ -89,6 +89,12 @@ class ReadOnceData extends Iterable[((String, Colour.Value), Int)] with TestData
   }
 }
 
+// TODO: remove duplication
+class IntSummer(curr: Int) extends Accumulator[Int] {
+  val value = curr
+  def +(i: Int) = new IntSummer(value + i)
+}
+
 object TestPreAggMeasure1 extends TestBulkDataSource with PreAggregated[Int] with Dimensionality1[String]
 
 object TestPreAggMeasure2 extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] with TestData {
@@ -99,8 +105,7 @@ object TestBulkAggMeasure extends BulkAggregated2[Int, String, Colour.Value] wit
   val data = twoDimData
   val d1 = CountriesDim
   val d2 = ColoursDim
-  val defValue = 0
-  def combine(v1: Int, v2: Int) = v1 + v2
+  def newAccumulator = new IntSummer(0)
 }
 
 object TestReadOnceMeasure extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] {

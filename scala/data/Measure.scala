@@ -10,14 +10,18 @@ trait PreAggregated[V] extends Measure[V] {
   def aggData = data
 }
 
+trait Accumulator[V] {
+  def value: V
+  def +(v: V): Accumulator[V]
+}
+
 trait BulkAggregated2[V, D1, D2] extends Measure[V] with Dimensionality2[D1, D2] {
   def data: Iterable[(K, V)]
-  def defValue: V
-  def combine(v1: V, v2: V) : V
   def d1: Dimension[D1]
   def d2: Dimension[D2]
+  def newAccumulator(): Accumulator[V]
   def aggData = {
-    var map = Map[K,V]()
+    var map = Map[K, Accumulator[V]]()
     for {
       datum <- data
       leaf1 = d1.node(datum._1._1)
@@ -26,10 +30,10 @@ trait BulkAggregated2[V, D1, D2] extends Measure[V] with Dimensionality2[D1, D2]
       node2 <- leaf2.selfAndAncestors
     } {
       val key = (node1.value, node2.value)
-      val existing = map.getOrElse(key, defValue)
-      map += ((key, combine(existing, datum._2)))
+      val existing = map.getOrElse(key, newAccumulator())
+      map += ((key, existing + datum._2))
     }
-    map
+    map.map((entry: (K, Accumulator[V])) => (entry._1, entry._2.value))
   }
 }
 
