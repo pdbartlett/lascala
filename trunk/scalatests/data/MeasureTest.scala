@@ -12,10 +12,18 @@ class MeasureTest extends FunSuite with DataTestUtils {
   }
 
   test("preAggMeasure2_data") {
-    assertIterablesEqual(twoDimData, TestPreAggMeasure2.data)
+    assertIterablesEqual(twoDimAggData, TestPreAggMeasure2.data)
   }
 
   test("preAggMeasure2_aggData") {
-    assertIterablesEqual(twoDimData, TestPreAggMeasure2.aggData)
+    assertIterablesEqual(twoDimAggData, TestPreAggMeasure2.aggData)
+  }
+
+  test("bulkAggMeasure2_data") {
+    assertIterablesEqual(twoDimData, TestBulkAggMeasure2.data)
+  }
+
+  test("bulkAggMeasure2_aggData") {
+    assertPairIterablesEqualIgnoreOrder(twoDimAggData, TestBulkAggMeasure2.aggData)
   }
 }
