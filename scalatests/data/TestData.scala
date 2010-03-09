@@ -85,6 +85,13 @@ class ReadOnceData extends Iterable[((String, Colour.Value), Int)] with TestData
   }
 }
 
+class TestFact(val country: String, val colour: Colour.Value, val count: Int)
+
+object TestFact {
+  def apply(country: String, colour: Colour.Value, count: Int) = new TestFact(country, colour, count)
+  def unapply(f: TestFact) = Some((f.country, f.colour, f.count)) // Extractors seem a natural fit for fact-based measures, but aren't yet
+}
+
 object TestPreAggMeasure1 extends TestBulkDataSource with PreAggregated[Int] with Dimensionality1[String]
 
 object TestPreAggMeasure2 extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] with TestData {
@@ -103,4 +110,12 @@ object TestReadOnceMeasure extends PreAggregated[Int] with Dimensionality2[Strin
 
 object TestStorageMeasure extends PreAggregated[Int] with InMemoryStorage[Int] with Dimensionality2[String, Colour.Value] {
   val data = new ReadOnceData
+}
+
+object TestFactBasedMeasure extends FactBasedMeasure2[TestFact, Int, String, Colour.Value] with BulkAggregated2[Int, String, Colour.Value]
+    with IntsAggregatedBySum {
+  val factData = List(TestFact("UK", Colour.Red, 1), TestFact("US", Colour.Blue, 2))
+  def extract(f: TestFact) = ((f.country, f.colour), f.count)
+  val dim1 = CountriesDim
+  val dim2 = ColoursDim
 }

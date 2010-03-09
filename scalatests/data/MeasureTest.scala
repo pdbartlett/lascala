@@ -33,4 +33,9 @@ class MeasureTest extends FunSuite with DataTestUtils {
     assertPairIterablesEqualIgnoreOrder(twoDimAggData, TestStorageMeasure.aggData)
     assertPairIterablesEqualIgnoreOrder(twoDimAggData, TestStorageMeasure.aggData)
   }
+
+  test("factBasedMeasure") {
+    assertPairIterablesEqualIgnoreOrder(twoDimData, TestFactBasedMeasure.data)
+    assertPairIterablesEqualIgnoreOrder(twoDimAggData, TestFactBasedMeasure.aggData)
+  }
 }
