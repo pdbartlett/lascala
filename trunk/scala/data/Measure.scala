@@ -15,17 +15,25 @@ trait Accumulator[V] {
   def +(v: V): Accumulator[V]
 }
 
+trait IntsAggregatedBySum {
+  def newAccumulator() = new IntSummer(0)
+  class IntSummer(val value: Int) extends Accumulator[Int] {
+    def +(i: Int) = new IntSummer(value + i)
+  }
+}
+
 trait BulkAggregated2[V, D1, D2] extends Measure[V] with Dimensionality2[D1, D2] {
   def data: Iterable[(K, V)]
-  def d1: Dimension[D1]
-  def d2: Dimension[D2]
+  def dim1: Dimension[D1]
+  def dim2: Dimension[D2]
   def newAccumulator(): Accumulator[V]
+  
   def aggData = {
     var map = Map[K, Accumulator[V]]()
     for {
       datum <- data
-      leaf1 = d1.node(datum._1._1)
-      leaf2 = d2.node(datum._1._2)
+      leaf1 = dim1.node(datum._1._1)
+      leaf2 = dim2.node(datum._1._2)
       node1 <- leaf1.selfAndAncestors
       node2 <- leaf2.selfAndAncestors
     } {
@@ -56,4 +64,3 @@ trait InMemoryStorage[V] extends Storage[V] {
   def store(aggregated: Iterable[(K, V)]) { map ++= aggregated }
   def retrieve() = map
 }
-    
