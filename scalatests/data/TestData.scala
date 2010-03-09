@@ -51,11 +51,7 @@ trait DataTestUtils extends TestData {
 
 object Colour extends Enumeration { val Red, Green, Blue = Value }
 
-// TODO: get rid of duplication.
-class SimpleNode[T](nodeValue: T, parentNode: Option[Node[T]]) extends Node[T] {
-  val value = nodeValue
-  val parent = parentNode
-}
+class SimpleNode[T](val value: T, val parent: Option[Node[T]]) extends Node[T]
 
 object ColoursDim extends Dimension[Colour.Value] {
   private val rootNode = new SimpleNode[Colour.Value](null, None)
@@ -89,23 +85,16 @@ class ReadOnceData extends Iterable[((String, Colour.Value), Int)] with TestData
   }
 }
 
-// TODO: remove duplication
-class IntSummer(curr: Int) extends Accumulator[Int] {
-  val value = curr
-  def +(i: Int) = new IntSummer(value + i)
-}
-
 object TestPreAggMeasure1 extends TestBulkDataSource with PreAggregated[Int] with Dimensionality1[String]
 
 object TestPreAggMeasure2 extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] with TestData {
   val data = twoDimAggData
 }
 
-object TestBulkAggMeasure extends BulkAggregated2[Int, String, Colour.Value] with TestData {
+object TestBulkAggMeasure extends BulkAggregated2[Int, String, Colour.Value] with IntsAggregatedBySum with TestData {
   val data = twoDimData
-  val d1 = CountriesDim
-  val d2 = ColoursDim
-  def newAccumulator = new IntSummer(0)
+  val dim1 = CountriesDim
+  val dim2 = ColoursDim
 }
 
 object TestReadOnceMeasure extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] {
