@@ -92,28 +92,27 @@ object TestFact {
   def unapply(f: TestFact) = Some((f.country, f.colour, f.count)) // Extractors seem a natural fit for fact-based measures, but aren't yet
 }
 
-object TestPreAggMeasure1 extends TestBulkDataSource with PreAggregated[Int] with Dimensionality1[String]
+object TestPreAggMeasure1 extends TestBulkDataSource with Measure1[Int, String] with PreAggregated
 
-object TestPreAggMeasure2 extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] with TestData {
+object TestPreAggMeasure2 extends Measure2[Int, String, Colour.Value] with PreAggregated with TestData {
   val data = twoDimAggData
 }
 
-object TestBulkAggMeasure extends BulkAggregated2[Int, String, Colour.Value] with IntsAggregatedBySum with TestData {
+object TestBulkAggMeasure extends Measure2[Int, String, Colour.Value] with BulkAggregated2 with IntsAggregatedBySum with TestData {
   val data = twoDimData
   val dim1 = CountriesDim
   val dim2 = ColoursDim
 }
 
-object TestReadOnceMeasure extends PreAggregated[Int] with Dimensionality2[String, Colour.Value] {
+object TestReadOnceMeasure extends Measure2[Int, String, Colour.Value] with PreAggregated {
   val data = new ReadOnceData
 }
 
-object TestStorageMeasure extends PreAggregated[Int] with InMemoryStorage[Int] with Dimensionality2[String, Colour.Value] {
+object TestStorageMeasure extends Measure2[Int, String, Colour.Value] with PreAggregated with InMemoryStorage {
   val data = new ReadOnceData
 }
 
-object TestFactBasedMeasure extends FactBasedMeasure2[TestFact, Int, String, Colour.Value] with BulkAggregated2[Int, String, Colour.Value]
-    with IntsAggregatedBySum {
+object TestFactBasedMeasure extends FactBasedMeasure2[TestFact, Int, String, Colour.Value] with BulkAggregated2 with IntsAggregatedBySum {
   val factData = List(TestFact("UK", Colour.Red, 1), TestFact("US", Colour.Blue, 2))
   def extract(f: TestFact) = ((f.country, f.colour), f.count)
   val dim1 = CountriesDim
