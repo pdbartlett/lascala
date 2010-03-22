@@ -6,5 +6,6 @@ import org.scalatest.SuperSuite
 
 class AllTests extends SuperSuite(List(
     new BulkDataSourceTest,
-    new MeasureTest
+    new MeasureTest,
+    new QueryTest
 )) {}
