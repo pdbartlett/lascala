@@ -3,8 +3,22 @@
 
   <property environment="env"/>
   <property name="classes" location="${env.HOME}/class"/>
+  <property name="jettylibdir" location="${env.JETTY_HOME}/lib"/>
   <property name="scalalib" location="${env.SCALA_HOME}/lib/scala-library.jar"/>
   <property name="scalatest" location="${env.SCALA_TEST}/scalatest-1.0.jar"/>
+
+  <path id="stdpath">
+    <pathelement location="${scalalib}"/>
+    <pathelement location="${scalatest}"/>
+    <fileset dir="${jettylibdir}">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="fullpath">
+    <pathelement location="${classes}"/>
+    <path refid="stdpath"/>
+  </path>
 
   <target name="init">
     <echo message="Initializing scala tasks..."/>
@@ -23,21 +37,31 @@
 
   <target name="build" depends="init">
     <echo message="Building scala apps/libraries..."/>
-    <scalac srcdir="scala" destdir="${classes}" classpath="${scalalib}">
+    <scalac srcdir="scala" destdir="${classes}">
       <include name="**/*.scala"/>
+      <classpath refid="stdpath"/>
     </scalac>
   </target>
 
   <target name="test" depends="build">
     <echo message="Building scala tests..."/>
-    <scalac srcdir="scalatests" destdir="${classes}" classpath="${scalalib};${scalatest}">
+    <scalac srcdir="scalatests" destdir="${classes}">
       <include name="**/*.scala"/>
+      <classpath refid="stdpath"/>
     </scalac>
     <echo message="Running scala tests..."/>
-    <java classname="org.scalatest.tools.Runner" classpath="${scalalib}:${scalatest}:${classes}">
+    <java classname="org.scalatest.tools.Runner">
       <arg value="-o"/>
       <arg value="-s"/>
       <arg value="pdbartlett.lascala.scala.AllTests"/>
+      <classpath refid="fullpath"/>
+    </java>
+  </target>
+
+  <target name="run" depends="build">
+    <echo message="Running server app..."/>
+    <java classname="pdbartlett.lascala.scala.server.App">
+      <classpath refid="fullpath"/>
     </java>
   </target>
 
