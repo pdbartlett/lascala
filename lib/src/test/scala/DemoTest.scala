@@ -9,6 +9,6 @@ class DemoTest extends FunSuite {
 	}
 	
 	test("actual test of demo code") {
-		assert(42 === Demo.answer)
+		assert(Demo.answer === 42)
 	}
 }

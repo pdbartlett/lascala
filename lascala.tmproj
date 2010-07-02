@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>project/build/LascalaProject.scala</string>
+	<string>web/src/main/scala/DemoServlet.scala</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -35,10 +35,40 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>web/src/main/scala/DemoServlet.scala</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>10</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>web/src/main/webapp/WEB-INF/web.xml</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>14</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>project/build/LascalaProject.scala</string>
+		<string>web/src/main/webapp/WEB-INF/web.xml</string>
+		<string>web/src/main/scala/DemoServlet.scala</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
