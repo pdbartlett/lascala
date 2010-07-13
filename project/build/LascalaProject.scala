@@ -8,7 +8,7 @@ class LascalaProject(info: ProjectInfo) extends ParentProject(info) {
   trait CommonDeps {
 		val scalaToolsSnapshots = ScalaToolsSnapshots
 		val stVersion = buildScalaVersion match {
-			case "2.8.0.RC6" => "1.2-for-scala-2.8.0.RC6-SNAPSHOT"
+			case "2.8.0.RC7" => "1.2-for-scala-2.8.0.RC7-SNAPSHOT"
 			case _ => "1.0"
 		}
 		val scalatest = "org.scalatest" % "scalatest" % stVersion % "test"

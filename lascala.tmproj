@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>lib/src/test/scala/DemoTest.scala</string>
+	<string>project/build/LascalaProject.scala</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -35,14 +35,42 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>project/build.properties</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>6</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>project/build/LascalaProject.scala</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>85</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>18</integer>
+				<integer>27</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>test.sbt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>7</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -95,13 +123,15 @@
 	<key>openDocuments</key>
 	<array>
 		<string>project/build/LascalaProject.scala</string>
+		<string>project/build.properties</string>
+		<string>test.sbt</string>
 		<string>web/src/test/scala/DemoServletTest.scala</string>
 		<string>lib/src/test/scala/DemoTest.scala</string>
 		<string>web/src/main/webapp/WEB-INF/web.xml</string>
 		<string>web/src/main/scala/DemoServlet.scala</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
-	<false/>
+	<true/>
 	<key>windowFrame</key>
 	<string>{{666, 4}, {774, 874}}</string>
 </dict>
