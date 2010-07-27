@@ -2,13 +2,13 @@ import sbt._
 
 class LascalaProject(info: ProjectInfo) extends ParentProject(info) {
 
-	val lib = project("lib", "lib", new LibProject(_))
-	val web = project("web", "web", new WebProject(_))
+	lazy val lib = project("lib", "Core libraries", new LibProject(_))
+	lazy val web = project("web", "Web-related functionality", new WebProject(_), lib)
 
   trait CommonDeps {
 		val scalaToolsSnapshots = ScalaToolsSnapshots
 		val stVersion = buildScalaVersion match {
-			case "2.8.0.RC7" => "1.2-for-scala-2.8.0.RC7-SNAPSHOT"
+			case "2.8.0" => "1.2-for-scala-2.8.0.final-SNAPSHOT"
 			case _ => "1.0"
 		}
 		val scalatest = "org.scalatest" % "scalatest" % stVersion % "test"
