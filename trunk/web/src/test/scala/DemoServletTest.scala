@@ -1,5 +1,8 @@
 package pdbartlett.lascala.web
 
+import pdbartlett.lascala.lib._
+
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
@@ -17,6 +20,8 @@ class DemoServletTest extends FunSuite {
 		driver.get(url)
 		assert(driver.getCurrentUrl === url)
 		assert(driver.getTitle === "Demo Servlet")
+		val paraText = driver.findElement(By.tagName("p")).getText
+		assert(paraText.endsWith(Demo.answer.toString))
 		driver.quit
 	}
 }
