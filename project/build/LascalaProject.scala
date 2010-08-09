@@ -25,4 +25,9 @@ class LascalaProject(info: ProjectInfo) extends ParentProject(info) {
 		val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.24" % "test"
 		//val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.1.4.v20100610" % "test"
 	}
+	
+	lazy val testall = task {
+		println("Woohoo!")
+		None
+  }
 }
